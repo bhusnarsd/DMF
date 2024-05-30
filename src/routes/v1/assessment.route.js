@@ -12,6 +12,12 @@ router
     assessmentController.queryAssessment
   );
 router
+  .route('/get-hightlights')
+  .get(
+    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer', 'department'),
+    assessmentController.getAssessmentHighlightsById
+  );
+router
   .route('/:id')
   .get(
     auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer', 'department'),

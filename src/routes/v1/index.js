@@ -14,6 +14,7 @@ const requestRoute = require('./request.route');
 const synopsisRoute = require('./synopsis.route');
 const skillTrainerRoute = require('./lifeSkillTrainer.route');
 const reqLifeTrainerRoute = require('./reqLifeTrainer.route');
+const notificationRoute = require('./notification.route');
 
 const router = express.Router();
 
@@ -70,6 +71,10 @@ const defaultRoutes = [
     path: '/request-life-trainer',
     route: reqLifeTrainerRoute,
   },
+  {
+    path: '/notification',
+    route: notificationRoute,
+  },
 ];
 
 const devRoutes = [
@@ -90,5 +95,10 @@ if (config.env === 'development') {
     router.use(route.path, route.route);
   });
 }
+// Add Socket.io to request object
+router.use((req, res, next) => {
+  req.io = req.app.get('socketio');
+  next();
+});
 
 module.exports = router;

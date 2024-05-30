@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -47,6 +48,19 @@ const getUserByEmail = async (username) => {
   return user;
 };
 
+const getUserByUsename = async (username, oldPassword) => {
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'User not found');
+  }
+  // Compare the provided oldPassword with the hashed password in the database
+  const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isPasswordMatch) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Enter Valid Old Password');
+  }
+  return user;
+};
+
 /**
  * Update user by id
  * @param {ObjectId} userId
@@ -82,6 +96,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByUsename,
   updateUserById,
   deleteUserById,
 };

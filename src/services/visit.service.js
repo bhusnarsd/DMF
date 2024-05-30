@@ -93,6 +93,7 @@ const getTrainerVisits = async (trainerId, status) => {
         visitDate: 1,
         time: 1,
         standard: 1,
+        status: 1,
         createdAt: 1,
         school: '$school',
       },
@@ -194,20 +195,62 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
 // module.exports = getSchoolIdsAndStudentCount;
 
 /**
- * Update user by id
- * @param {ObjectId} id
+ * Update visit by schoolId, standard, and trainer
+ * @param {String} schoolId
+ * @param {String} standard
+ * @param {ObjectId} trainer
  * @param {Object} updateBody
- * @returns {Promise<Sansthan>}
+ * @returns {Promise<Visit>}
  */
 const updateVisitById = async (schoolId, standard, trainer, updateBody) => {
   const result = await Visit.findOne({ schoolId, standard, trainer });
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
   }
+
+  // // Check if the visit already has inTime and inDate set and we're trying to update them again
+  // if ((updateBody.inTime || updateBody.inDate) && (result.inTime || result.inDate)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has inTime or inDate set');
+  // }
+
+  // // Check if the visit already has outTime and outDate set and we're trying to update them again
+  // if ((updateBody.outTime || updateBody.outDate) && (result.outTime || result.outDate)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has outTime or outDate set');
+  // }
+
+  // // Check if the visit already has file or file1 set and we're trying to update them again
+  // if ((updateBody.file || updateBody.file1) && (result.file || result.file1)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has file, file1, or file2 set');
+  // }
+
+  // Update the visit document with new data
   Object.assign(result, updateBody);
   await result.save();
-  return result;
+
+  // Re-fetch the visit document after update
+  const updatedResult = await Visit.findOne({ schoolId, standard, trainer });
+
+  // Check if all conditions are met to set status to 'completed'
+  const { inTime, outTime, inDate, outDate, file, file1 } = updatedResult;
+  const totalStudents = await Student.countDocuments({ standard, schoolId });
+  const totalSynopses = await Synopsis.countDocuments({ standard, schoolId });
+
+  if (inTime && outTime && inDate && outDate && file && file1 && totalStudents === totalSynopses) {
+    updatedResult.status = 'completed';
+    await updatedResult.save();
+  }
+
+  return updatedResult;
 };
+// const updateVisitById = async (schoolId, standard, trainer, updateBody) => {
+//   const result = await Visit.findOne({ schoolId, standard, trainer });
+//   if (!result) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
+//   }
+//   Object.assign(result, updateBody);
+//   await result.save();
+//   return result;
+// };
 
 module.exports = {
   queryStudent,

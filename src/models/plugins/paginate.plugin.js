@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-param-reassign */
 const paginate = (schema) => {
   /**
@@ -42,7 +43,11 @@ const paginate = (schema) => {
     }
 
     const countPromise = this.countDocuments(filter).exec();
-    let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
+    let docsPromise = this.find(filter)
+                          .sort(sort)
+                          .skip(skip)
+                          .limit(limit)
+                          .select('+createdAt +updatedAt'); // Ensure createdAt and updatedAt fields are included
 
     if (options.populate) {
       options.populate.split(',').forEach((populateOption) => {

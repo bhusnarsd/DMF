@@ -25,6 +25,19 @@ const queryRequest = async (filter, options) => {
   return result;
 };
 
+// // Example usage
+// (async () => {
+//   const filter = {}; // Your filter criteria
+//   const options = {
+//     // sortBy: 'createdAt:desc',
+//     // limit: 10,
+//     schoolId: "SCH110923",
+//     page: 1,
+//   };
+//   const paginatedResults = await queryRequest(filter, options);
+//   console.log(paginatedResults);
+// })();
+// Example usage
 const getRequestById = async (id) => {
   return Request.findById(id);
 };

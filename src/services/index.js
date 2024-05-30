@@ -14,3 +14,4 @@ module.exports.requestServices = require('./request.service');
 module.exports.lifeSkillTrainer = require('./lifeSkillTrainer.service');
 module.exports.reqLifeTrainerServices = require('./reqLifeTrainer.service');
 module.exports.otpService = require('./otp.service');
+module.exports.notificationService = require('./notification.service');

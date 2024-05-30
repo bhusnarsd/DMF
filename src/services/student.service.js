@@ -104,7 +104,7 @@ const generateToken = async (studentId) => {
  * @returns {Promise<QueryResult>}
  */
 const queryStudent = async (filter, options) => {
-  const result = await Student.paginate(filter, options);
+  const result = await Student.paginateWithStudentStatus(filter, options);
   return result;
 };
 

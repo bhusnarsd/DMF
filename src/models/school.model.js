@@ -58,7 +58,7 @@ const schoolSchema = mongoose.Schema({
     type: Number,
     default: 58,
   },
-  logitude: {
+  longitude: {
     type: String,
   },
   latitude: {

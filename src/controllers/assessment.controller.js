@@ -23,6 +23,13 @@ const getAssessmentById = catchAsync(async (req, res) => {
   }
   res.send(result);
 });
+const getAssessmentHighlightsById = catchAsync(async (req, res) => {
+  const result = await assessmentService.getHighlights(req.query.studentId);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Assessment not found');
+  }
+  res.send(result);
+});
 
 const updateAssessmentById = catchAsync(async (req, res) => {
   const result = await assessmentService.updateAssessmentById(req.params.id, req.body);
@@ -32,6 +39,7 @@ const updateAssessmentById = catchAsync(async (req, res) => {
 module.exports = {
   createAssessment,
   queryAssessment,
+  getAssessmentHighlightsById,
   getAssessmentById,
   updateAssessmentById,
 };

@@ -74,8 +74,8 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const resetPasswordWithUserName = catchAsync(async (req, res) => {
-  const { username, password } = req.body;
-  await authService.resetPasswordWithUserName(username, password);
+  const { username,oldPassword, password } = req.body;
+  await authService.resetPasswordWithUserName(username,oldPassword, password);
   res.status(200).send({ message: 'Password has been reset' });
 });
 

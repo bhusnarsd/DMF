@@ -12,3 +12,4 @@ module.exports.Request = require('./reqCounsellor.model');
 module.exports.LifeTrainerVisit = require('./lifeSkillTrainer.model');
 module.exports.ReqLifeTrainer = require('./reqLifeTrainer.model');
 module.exports.Otp = require('./otp.model');
+module.exports.Notification = require('./notification.model');

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 const httpStatus = require('http-status');
 const { Assessment, Student } = require('../models');
@@ -46,6 +47,137 @@ const queryAssessment = async (filter, options) => {
 const getAssessmentById = async (id) => {
   return Assessment.findById(id);
 };
+
+// const getHighlights = async (studentId) => {
+//   const reports = await Assessment.findOne({ studentId });
+
+//   // Calculate Aptitude counts
+//   const aptitudeCounts = reports.reduce((acc, report) => {
+//     report.aptitude.forEach((apt) => {
+//       if (acc[apt.factor_name]) {
+//         acc[apt.factor_name]++;
+//       } else {
+//         acc[apt.factor_name] = 1;
+//       }
+//     });
+//     return acc;
+//   }, {});
+
+//   // Calculate Personality counts
+//   const personalityCounts = reports.reduce((acc, report) => {
+//     report.personality.forEach((pers) => {
+//       if (acc[pers.factor_name]) {
+//         acc[pers.factor_name]++;
+//       } else {
+//         acc[pers.factor_name] = 1;
+//       }
+//     });
+//     return acc;
+//   }, {});
+
+//   // Calculate Interest counts
+//   const interestCounts = reports.reduce((acc, report) => {
+//     report.interest.scoreWiseData.forEach((int) => {
+//       if (acc[int.factor_name]) {
+//         acc[int.factor_name]++;
+//       } else {
+//         acc[int.factor_name] = 1;
+//       }
+//     });
+//     return acc;
+//   }, {});
+
+//   // Get Top 4 Career Cluster Fitments
+//   const careerClusterFitments = reports.reduce((acc, report) => {
+//     report.career_fitments.forEach((career) => {
+//       acc.push({ career_name: career.career_name, fitment: career.fitment });
+//     });
+//     return acc;
+//   }, []);
+
+//   careerClusterFitments.sort((a, b) => b.fitment - a.fitment);
+//   const top4CareerClusterFitments = careerClusterFitments.slice(0, 4);
+
+//   return {
+//     aptitudeCounts,
+//     personalityCounts,
+//     interestCounts,
+//     top4CareerClusterFitments,
+//   };
+// };
+
+const getHighlights = async (studentId) => {
+  const report = await Assessment.findOne({ studentId });
+
+  if (!report) {
+    throw new Error('No report found for the given studentId');
+  }
+
+  // Calculate Aptitude counts
+  const aptitudeCounts = report.appitude
+    ? report.appitude.reduce((acc, apt) => {
+        if (acc[apt.factor_name]) {
+          acc[apt.factor_name]++;
+        } else {
+          acc[apt.factor_name] = 1;
+        }
+        return acc;
+      }, {})
+    : {};
+
+  // Calculate Personality counts
+  const personalityCounts = report.personality
+    ? report.personality.reduce((acc, pers) => {
+        if (acc[pers.factor_name]) {
+          acc[pers.factor_name]++;
+        } else {
+          acc[pers.factor_name] = 1;
+        }
+        return acc;
+      }, {})
+    : {};
+
+  // Calculate Interest counts
+  const interestCounts =
+    report.interest && report.interest.scoreWiseData
+      ? report.interest.scoreWiseData.reduce((acc, int) => {
+          if (acc[int.factor_name]) {
+            acc[int.factor_name]++;
+          } else {
+            acc[int.factor_name] = 1;
+          }
+          return acc;
+        }, {})
+      : {};
+
+  // Get Top 4 Career Cluster Fitments
+  const careerClusterFitments = report.career_fitments
+    ? report.career_fitments.map((career) => ({
+        career_name: career.career_name,
+        fitment: career.fitment,
+      }))
+    : [];
+
+  careerClusterFitments.sort((a, b) => b.fitment - a.fitment);
+  const top4CareerClusterFitments = careerClusterFitments.slice(0, 4);
+
+  return {
+    aptitudeCounts,
+    personalityCounts,
+    interestCounts,
+    top4CareerClusterFitments,
+  };
+};
+
+// const studentId = "STUD741187";
+// getHighlights(studentId)
+//   .then(result => {
+//     console.log('Highlights:', result);
+//   })
+//   .catch(error => {
+//     console.error('Error getting highlights:', error);
+//   });
+
 /**
  * Update user by id
  * @param {ObjectId} id
@@ -64,6 +196,7 @@ const updateAssessmentById = async (id, updateBody) => {
 
 module.exports = {
   createAssessment,
+  getHighlights,
   queryAssessment,
   getAssessmentById,
   updateAssessmentById,
