@@ -17,6 +17,9 @@ const requestLifeTainerSchema = new mongoose.Schema(
     schoolName: {
       type: String,
     },
+    schoolCluster: {
+      type: String,
+    },
   },
   {
     timestamps: true,

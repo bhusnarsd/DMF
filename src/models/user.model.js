@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema(
     mobNumber: {
       type: Number,
     },
+    cluster: {
+      type: String,
+    },
     username: {
       type: String,
       // required: true,

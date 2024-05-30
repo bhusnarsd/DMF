@@ -20,6 +20,9 @@ const requestSchema = new mongoose.Schema(
     schoolName: {
       type: String,
     },
+    schoolCluster: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -8,6 +8,7 @@ const createUser = {
     password: Joi.string().required().custom(password),
     firstName: Joi.string(),
     lastName: Joi.string(),
+    cluster: Joi.string(),
     role: Joi.string()
       .required()
       .valid('user', 'admin', 'superadmin', 'student', 'trainer', 'cluster', 'school', 'department', 'skillTrainer'),
@@ -53,6 +54,7 @@ const updateUser = {
       mobNumber: Joi.number().allow('', null),
       firstName: Joi.string(),
       lastName: Joi.string(),
+      cluster: Joi.string(),
       asssignedTo: Joi.string(),
     })
     .min(1),
