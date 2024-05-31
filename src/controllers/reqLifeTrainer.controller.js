@@ -29,13 +29,10 @@ const deleteRequestById = catchAsync(async (req, res) => {
   res.send(result);
 });
 
-
-
-
-const updateTeacher = catchAsync(async (req, res) => {
-  const result = await teacherService.updateTeacherById(req.params.id, req.body);
-  res.send(result);
-});
+// const updateTeacher = catchAsync(async (req, res) => {
+//   const result = await teacherService.updateTeacherById(req.params.id, req.body);
+//   res.send(result);
+// });
 
 module.exports = {
   deleteRequestById,
