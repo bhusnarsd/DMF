@@ -122,7 +122,8 @@ schoolSchema.statics.paginateWithStudentAndVisitCount = async function (filter, 
       results.map(async (school) => {
         const studentCount = await Student.countDocuments({ schoolId: school.schoolId });
         const visitCount = await Visit.countDocuments({ schoolId: school.schoolId });
-        return { ...school.toObject(), studentCount, visitCount };
+        const visitCompletedCount = await Visit.countDocuments({ schoolId: school.schoolId, status: 'completed' });
+        return { ...school.toObject(), studentCount, visitCount, visitCompletedCount };
       })
     );
 
