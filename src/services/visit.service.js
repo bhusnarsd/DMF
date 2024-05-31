@@ -97,10 +97,13 @@ const getTrainerVisits = async (trainerId, status) => {
         createdAt: 1,
         school: '$school',
       },
+    },
+    {
+      $sort: { createdAt: -1 }, // Sort by createdAt in descending order
     }
   );
 
-  const visits = await Visit.aggregate(pipeline);
+  const visits = await Visit.aggregate(pipeline).sort();
   return visits;
 };
 
