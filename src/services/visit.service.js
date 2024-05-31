@@ -100,7 +100,7 @@ const getTrainerVisits = async (trainerId, status) => {
     }
   );
 
-  const visits = await Visit.aggregate(pipeline).sort();
+  const visits = await Visit.aggregate(pipeline);
   return visits;
 };
 
