@@ -12,11 +12,16 @@ const { smsAlert, createOtp, generateOTP, verifyOtp } = require('./otp.service')
  * @param {string} password
  * @returns {Promise<User>}
  */
-const loginUserWithEmailAndPassword = async (username, password) => {
+const loginUserWithEmailAndPassword = async (username, password, deviceToken) => {
   const user = await userService.getUserByEmail(username);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect username or password');
   }
+  if(deviceToken){
+    Object.assign(user, {deviceToken});
+    await user.save();
+  }
+
   return user;
 };
 

@@ -99,6 +99,8 @@ const getSchoolStatistics = async (schoolId) => {
   const totalLifeSkillTrainer = await User.countDocuments({ role: 'skillTrainer' });
   const visitsPendingTrainer = await LifeTrainerVisit.countDocuments({ status: 'pending', schoolId: schoolIdStr });
   const visitsCompletedTrainer = await LifeTrainerVisit.countDocuments({ status: 'completed', schoolId: schoolIdStr });
+  const visitsPending = await Visit.countDocuments({ status: 'pending', schoolId });
+  const visitsCompleted = await Visit.countDocuments({ status: 'completed', schoolId });
   // Fetch various counts related to visits and assessments
   const visitsCount = await Visit.countDocuments({ schoolId: schoolIdStr });
   const pastSessionCount = await Visit.countDocuments({ status: 'completed', schoolId: schoolIdStr });
@@ -138,6 +140,8 @@ const getSchoolStatistics = async (schoolId) => {
     totalLifeSkillTrainer,
     visitsPendingTrainer,
     visitsCompletedTrainer,
+    visitsPending,
+    visitsCompleted,
     visitsCount,
     pastSessionCount,
     visitsByStandard,

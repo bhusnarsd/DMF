@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema(
     mobNumber: {
       type: Number,
     },
+    deviceToken: {
+      type: String,
+    },
     username: {
       type: String,
       // required: true,
@@ -39,6 +42,9 @@ const userSchema = mongoose.Schema(
         }
       },
       private: true, // used by the toJSON plugin
+    },
+    cluster: {
+      type: String,
     },
     role: {
       type: String,
