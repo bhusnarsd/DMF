@@ -185,6 +185,7 @@ const getStudentById = async (id) => {
 };
 
 const getStudentId = async (studentId) => {
+  console.log(studentId)
   return Student.findOne({studentId});
 };
 /**
