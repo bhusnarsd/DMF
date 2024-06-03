@@ -21,8 +21,10 @@ const createRequest = async (reqBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryRequest = async (filter, options) => {
-  const { limit = 10, page = 1, sortBy } = options;
+  const limit = parseInt(options.limit, 10) || 10;
+  const page = parseInt(options.page, 10) || 1;
   const skip = (page - 1) * limit;
+  const sortBy = options.sortBy || '';
 
   const [results, total] = await Promise.all([
     Request.find(filter).sort(sortBy).skip(skip).limit(limit).exec(),
@@ -39,6 +41,7 @@ const queryRequest = async (filter, options) => {
     totalPages,
   };
 };
+
 // const queryRequest = async (filter, options) => {
 //   const result = await Request.paginate(filter, options);
 //   return result;

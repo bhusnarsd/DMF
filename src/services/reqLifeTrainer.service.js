@@ -3,8 +3,10 @@ const { ReqLifeTrainer } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const queryRequest = async (filter, options) => {
-  const { limit = 10, page = 1, sortBy } = options;
+  const limit = parseInt(options.limit, 10) || 10;
+  const page = parseInt(options.page, 10) || 1;
   const skip = (page - 1) * limit;
+  const sortBy = options.sortBy || '';
 
   const [results, total] = await Promise.all([
     ReqLifeTrainer.find(filter).sort(sortBy).skip(skip).limit(limit).exec(),
