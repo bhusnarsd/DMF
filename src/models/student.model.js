@@ -34,6 +34,9 @@ const studentShema = mongoose.Schema(
       type: Number,
       default: 58,
     },
+    academicYear: {
+      type: String,
+    },
     packageId: {
       type: Number,
       default: 54,

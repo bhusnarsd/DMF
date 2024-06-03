@@ -12,7 +12,7 @@ const sendNotification = async (deviceToken, title, body) => {
     },
     token: deviceToken,
   };
-  const data = await admin.messaging().send(message);
+  await admin.messaging().send(message);
 };
 const scheduleVisit = async (trainerId, schoolId, visitDate, time) => {
   // Check for duplicate visit
@@ -53,26 +53,6 @@ const scheduleVisit = async (trainerId, schoolId, visitDate, time) => {
 
   return visit; // Return the saved visit
 };
-
-// const scheduleVisit = async (trainerId, schoolId, visitDate, time, standard) => {
-//   const visit = new Visit({
-//     trainer: trainerId,
-//     schoolId,
-//     visitDate,
-//     time,
-//     standard,
-//   });
-//   await visit.save();
-//   // Update trainer's visits
-//   const trainer = await User.findById(trainerId);
-//   if (!trainer) {
-//     throw new Error('Trainer not found');
-//   }
-//   trainer.visits.push(visit._id);
-//   await trainer.save();
-
-//   return visit; // Return the saved visit
-// };
 
 const getTrainerVisits = async (trainerId, status) => {
   const pipeline = [];
@@ -135,16 +115,6 @@ const getVisitsBySchoolId = async (schoolId) => {
   return populatedVisits;
 };
 
-// const trainerId = "6645ec9ac3deb1833d210467";
-// getTrainerVisits(trainerId)
-//   .then(async(result) => {
-
-//     console.log('Trainer visits:', result);
-//   })
-//   .catch((error) => {
-//     console.error('Error getting trainer visits:', error);
-//   });
-
 /**
  * Query for sansthan
  * @param {Object} filter - Mongo filter
@@ -193,20 +163,6 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
   };
 };
 
-// module.exports = getSchoolIdsAndStudentCount;
-
-// Example usage
-// const trainerId = '6645ec9ac3deb1833d210467'; // Replace with actual trainer ID
-// getSchoolIdsAndStudentCount(trainerId)
-//   .then((result) => {
-//     console.log(result);
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-
-// module.exports = getSchoolIdsAndStudentCount;
-
 /**
  * Update user by id
  * @param {ObjectId} id
@@ -222,51 +178,6 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
  * @param {Object} updateBody
  * @returns {Promise<Visit>}
  */
-// const updateVisitById = async (schoolId, trainer, updateBody) => {
-//   const result = await LifeTrainerVisit.findOne({ schoolId, trainer });
-//   if (!result) {
-//     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
-//   }
-
-//   // Check if the visit already has inTime and inDate set and we're trying to update them again
-//   if ((result.inTime || result.inDate)) {
-//     if(updateBody.inTime || updateBody.inDate){
-//       throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has inTime or inDate set');
-//     }
-
-//   }
-
-//   // Check if the visit already has outTime and outDate set and we're trying to update them again
-//   if (result.outTime || result.outDate) {
-// if(updateBody.outTime || updateBody.outDate){
-//   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has outTime or outDate set');
-// }
-// }
-
-//   // Check if the visit already has file or file1 set and we're trying to update them again
-//   if (result.file || result.file1) {
-//     if(updateBody.file || updateBody.file1)
-// {throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has file, file1, or file2 set');
-
-// }
-//   }
-
-//   // Update the visit document with new data
-//   Object.assign(result, updateBody);
-//   await result.save();
-
-//   // Re-fetch the visit document after update
-//   const updatedResult = await LifeTrainerVisit.findOne({ schoolId, trainer });
-
-//   // Check if all conditions are met to set status to 'completed'
-//   const { inTime, outTime, inDate, outDate, file, file1 } = updatedResult;
-//   if (inTime && outTime && inDate && outDate && file && file1) {
-//     updatedResult.status = 'completed';
-//     await updatedResult.save();
-//   }
-
-//   return updatedResult;
-// };
 const updateVisitById = async (schoolId, trainer, updateBody) => {
   // Find the visit document by schoolId and trainer
   const result = await LifeTrainerVisit.findOne({ schoolId, trainer });
@@ -274,22 +185,6 @@ const updateVisitById = async (schoolId, trainer, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
   }
 
-  // // Check if the visit already has inTime and inDate set and we're trying to update them again
-  // if ((result.inTime || result.inDate) && (updateBody.inTime || updateBody.inDate)) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has inTime or inDate set');
-  // }
-
-  // // Check if the visit already has outTime and outDate set and we're trying to update them again
-  // if ((result.outTime || result.outDate) && (updateBody.outTime || updateBody.outDate)) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has outTime or outDate set');
-  // }
-
-  // // Check if the visit already has file or file1 set and we're trying to update them again
-  // if ((result.file || result.file1) && (updateBody.file || updateBody.file1)) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Visit already has file or file1 set');
-  // }
-
-  // Update the visit document with new data
   Object.assign(result, updateBody);
   await result.save();
 
