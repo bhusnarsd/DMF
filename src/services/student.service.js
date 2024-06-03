@@ -183,6 +183,10 @@ const getStudentAssessments = async (schoolId, standard) => {
 const getStudentById = async (id) => {
   return Student.findById(id);
 };
+
+const getStudentId = async (studentId) => {
+  return Student.findOne({studentId});
+};
 /**
  * Update user by id
  * @param {ObjectId} id
@@ -275,4 +279,5 @@ module.exports = {
   deleteStudentById,
   getStudentUserData,
   writeCSV,
+  getStudentId,
 };

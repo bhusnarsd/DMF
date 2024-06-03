@@ -21,9 +21,28 @@ const createRequest = async (reqBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryRequest = async (filter, options) => {
-  const result = await Request.paginate(filter, options);
-  return result;
+  const { limit = 10, page = 1, sortBy } = options;
+  const skip = (page - 1) * limit;
+
+  const [results, total] = await Promise.all([
+    Request.find(filter).sort(sortBy).skip(skip).limit(limit).exec(),
+    Request.countDocuments(filter),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    results,
+    total,
+    limit,
+    page,
+    totalPages,
+  };
 };
+// const queryRequest = async (filter, options) => {
+//   const result = await Request.paginate(filter, options);
+//   return result;
+// };
 
 // // Example usage
 // (async () => {

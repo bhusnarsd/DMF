@@ -28,11 +28,16 @@ router.get(
   auth('admin', 'school', 'superadmin', 'student', 'trainer'),
   studentController.generateCSVOfStudent
 );
+
 router
   .route('/:studentId')
   .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.getStudentById)
   .patch(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.updateStudent)
   .delete(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.deleteStudentById);
+
+router
+  .route('get-by-studentid/:studentId')
+  .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.getStudentId);
 module.exports = router;
 
 /**

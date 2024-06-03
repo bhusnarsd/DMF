@@ -56,6 +56,14 @@ const getStudentById = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getStudentId = catchAsync(async (req, res) => {
+  const result = await studentService.getStudentId(req.params.studentId);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student not found');
+  }
+  res.send(result);
+});
+
 const generateToken = catchAsync(async (req, res) => {
   const { studentId } = req.query;
   const token = await studentService.generateToken(studentId);
@@ -102,4 +110,5 @@ module.exports = {
   deleteStudentById,
   generateCSVOfStudent,
   getAllStudentBySchooolId,
+  getStudentId,
 };
