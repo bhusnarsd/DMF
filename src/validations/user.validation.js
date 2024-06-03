@@ -12,6 +12,7 @@ const createUser = {
       .required()
       .valid('user', 'admin', 'superadmin', 'student', 'trainer', 'cluster', 'school', 'department', 'skillTrainer'),
     asssignedTo: Joi.string().allow('', null),
+    cluster: Joi.string().allow('', null),
   }),
 };
 
@@ -54,6 +55,7 @@ const updateUser = {
       firstName: Joi.string(),
       lastName: Joi.string(),
       asssignedTo: Joi.string(),
+      cluster: Joi.string().allow('', null),
     })
     .min(1),
 };

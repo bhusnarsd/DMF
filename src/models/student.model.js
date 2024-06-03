@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 
 const studentShema = mongoose.Schema(
@@ -58,6 +58,14 @@ const studentShema = mongoose.Schema(
 // add plugin that converts mongoose to json
 studentShema.plugin(toJSON);
 studentShema.plugin(paginate);
+
+studentShema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
+});
 
 /**
  * @typedef Student
