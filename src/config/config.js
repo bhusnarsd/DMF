@@ -30,6 +30,7 @@ const envVarsSchema = Joi.object()
     SMS_SECUREKEY: Joi.string(),
     SMS_SENDERID: Joi.string(),
     SMS_TEMPLETID: Joi.string(),
+    FIREBASE_SERVICE_ACCOUNT: Joi.string().description('Firebase service account JSON string'),
   })
   .unknown();
 
@@ -38,6 +39,8 @@ const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' }
 if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
+
+const firebaseServiceAccount = envVars.FIREBASE_SERVICE_ACCOUNT;
 
 module.exports = {
   env: envVars.NODE_ENV,
@@ -79,5 +82,8 @@ module.exports = {
     SMS_SENDERID: envVars.SMS_SENDERID,
     SMS_TEMPLETID: envVars.SMS_TEMPLETID,
     SMS_USERPASS: envVars.SMS_USERPASS,
+  },
+  firebase: {
+    serviceAccount: { firebaseServiceAccount },
   },
 };

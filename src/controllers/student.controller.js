@@ -51,7 +51,7 @@ const getAllStudentBySchooolId = catchAsync(async (req, res) => {
 const getStudentById = catchAsync(async (req, res) => {
   const result = await studentService.getStudentById(req.params.studentId);
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student not found');
   }
   res.send(result);
 });

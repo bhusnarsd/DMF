@@ -303,15 +303,27 @@ const updateVisitById = async (schoolId, trainer, updateBody) => {
   return result;
 };
 
-// const updateVisitById = async (schoolId, standard, trainer, updateBody) => {
-//   const result = await LifeTrainerVisit.findOne({ schoolId, standard, trainer });
-//   if (!result) {
-//     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
-//   }
-//   Object.assign(result, updateBody);
-//   await result.save();
-//   return result;
-// };
+const deleteVisit = async (visitId) => {
+  // Find the visit by ID
+  const visit = await LifeTrainerVisit.findById(visitId);
+  if (!visit) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
+  }
+
+  // Remove the visit from the trainer's visits array
+  const trainer = await User.findById(visit.trainer);
+  if (!trainer) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Trainer not found');
+  }
+
+  trainer.visits.pull(visitId);
+  await trainer.save();
+
+  // Delete the visit
+  await visit.remove();
+
+  return visit; // Return the deleted visit
+};
 module.exports = {
   queryStudent,
   getVisitById,
@@ -320,4 +332,5 @@ module.exports = {
   getVisitsBySchoolId,
   updateVisitById,
   scheduleVisit,
+  deleteVisit,
 };

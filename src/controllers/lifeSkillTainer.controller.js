@@ -51,6 +51,12 @@ const getVisitById = catchAsync(async (req, res) => {
   const visit = await lifeSkillTrainer.getVisitById(req.params.id);
   res.status(httpStatus.CREATED).send(visit);
 });
+
+const deleteVisit = catchAsync(async (req, res) => {
+  const result = await lifeSkillTrainer.deleteVisit(req.params.id);
+  res.send(result);
+});
+
 module.exports = {
   createSchedule,
   getTrainerVisits,
@@ -59,4 +65,5 @@ module.exports = {
   updateVisitById,
   addInOutTIme,
   getVisitById,
+  deleteVisit,
 };

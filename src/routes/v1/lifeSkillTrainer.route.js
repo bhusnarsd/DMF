@@ -44,5 +44,6 @@ router.route('/update').patch(
 );
 
 router.route('/add-in-out-time').patch(lifeSkillController.addInOutTIme);
+router.route('/delete/:id').delete(lifeSkillController.deleteVisit);
 router.route('/get-by/:id').get(lifeSkillController.getVisitById);
 module.exports = router;
