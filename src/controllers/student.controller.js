@@ -94,6 +94,10 @@ const updateStudent = catchAsync(async (req, res) => {
   const result = await studentService.updateStudentById(req.params.studentId, req.body);
   res.send(result);
 });
+const updateStudentByID = catchAsync(async (req, res) => {
+  const result = await studentService.updateStudent(req.params.studentId, req.body);
+  res.send(result);
+});
 
 const deleteStudentById = catchAsync(async (req, res) => {
   const student = await studentService.deleteStudentById(req.params.studentId);
@@ -111,4 +115,5 @@ module.exports = {
   generateCSVOfStudent,
   getAllStudentBySchooolId,
   getStudentId,
+  updateStudentByID,
 };

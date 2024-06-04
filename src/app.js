@@ -92,7 +92,6 @@ const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
-const socketIo = require('socket.io');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -103,12 +102,6 @@ const ApiError = require('./utils/ApiError');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-  },
-});
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
@@ -145,17 +138,6 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
-
-// Socket.io connection
-io.on('connection', (socket) => {
-  console.log('New client connected');
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
-
-// Make `io` accessible in routes
-app.set('socketio', io);
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

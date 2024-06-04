@@ -36,6 +36,10 @@ router
   .delete(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.deleteStudentById);
 
 router
+  .route('/update/:studentId')
+  .patch(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.updateStudentByID);
+
+router
   .route('/get-by-studentid/:studentId')
   .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'), studentController.getStudentId);
 module.exports = router;

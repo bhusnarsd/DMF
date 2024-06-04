@@ -209,6 +209,30 @@ const updateStudentById = async (id, updateBody) => {
   await result.save();
   return result;
 };
+
+
+/**
+ * Update user by id
+ * @param {ObjectId} id
+ * @param {Object} updateBody
+ * @returns {Promise<Sansthan>}
+ */
+const updateStudent = async (studentId, updateBody) => {
+  const result = await getStudentId(studentId);
+  // const user = await User.findOne({ username: result.studentId });
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student not found');
+  }
+  const user = await User.findOne({ username: result.studentId });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  Object.assign(user, updateBody);
+  Object.assign(result, updateBody);
+  user.save();
+  await result.save();
+  return result;
+}
 /**
  * Delete user by id
  * @param {ObjectId} schoolId
@@ -279,5 +303,7 @@ module.exports = {
   deleteStudentById,
   getStudentUserData,
   writeCSV,
+  updateStudent,
   getStudentId,
 };
+
