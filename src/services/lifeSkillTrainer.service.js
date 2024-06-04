@@ -178,24 +178,73 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
  * @param {Object} updateBody
  * @returns {Promise<Visit>}
  */
-const updateVisitById = async (schoolId, trainer, updateBody) => {
-  // Find the visit document by schoolId and trainer
+// const updateVisitById = async (schoolId, trainer, updateBody) => {
+//   // Find the visit document by schoolId and trainer
+//   const result = await LifeTrainerVisit.findOne({ schoolId, trainer });
+//   if (!result) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
+//   }
+
+//   Object.assign(result, updateBody);
+//   await result.save();
+
+//   // Check if all conditions are met to set status to 'completed'
+//   const { inTime, outTime, inDate, outDate, file, file1 } = result;
+//   if (inTime && outTime && inDate && outDate && file && file1) {
+//     result.status = 'completed';
+//     await result.save();
+//   }
+
+//   return result;
+// };
+
+
+// const updateVisitById = async (schoolId, standard, trainer, updateData) => {
+//   const result = await Visit.findOne({ schoolId, standard, trainer });
+//   // console.log(schoolId, standard, trainerId )
+//   if (!result) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
+//   }
+
+//   // Update the visit document with new file URLs
+//   result.files = updateData.map(data => data.url);
+//   await result.save();
+
+//   // Re-fetch the visit document after update
+//   const updatedResult = await Visit.findOne({ schoolId, standard, trainer });
+
+//   // Check if all conditions are met to set status to 'completed'
+//   const { inTime, outTime, inDate, outDate, files } = updatedResult;
+//   if (inTime && outTime && inDate && outDate && files.length > 0) {
+//     updatedResult.status = 'completed';
+//     await updatedResult.save();
+//   }
+
+//   return updatedResult;
+// };
+
+const updateVisitById = async (schoolId, trainer, updateData) => {
   const result = await LifeTrainerVisit.findOne({ schoolId, trainer });
+  // console.log(schoolId, standard, trainerId )
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
   }
 
-  Object.assign(result, updateBody);
+  // Update the visit document with new file URLs
+  result.files = updateData.map(data => data.url);
   await result.save();
 
+  // Re-fetch the visit document after update
+  const updatedResult = await LifeTrainerVisit.findOne({ schoolId, trainer });
+
   // Check if all conditions are met to set status to 'completed'
-  const { inTime, outTime, inDate, outDate, file, file1 } = result;
-  if (inTime && outTime && inDate && outDate && file && file1) {
-    result.status = 'completed';
-    await result.save();
+  const { inTime, outTime, inDate, outDate, files } = updatedResult;
+  if (inTime && outTime && inDate && outDate && files.length > 0) {
+    updatedResult.status = 'completed';
+    await updatedResult.save();
   }
 
-  return result;
+  return updatedResult;
 };
 
 const deleteVisit = async (visitId) => {

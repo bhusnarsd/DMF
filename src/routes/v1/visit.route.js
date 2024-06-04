@@ -36,7 +36,7 @@ router.route('/get/android').get(visitController.getTrainerVisits);
 router.route('/get-trainer-details/:schoolId').get(visitController.getVisitsBySchoolId);
 router.route('/update').patch(
   // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
-  upload.array('files', 10), uploadFilesMiddleware,
+  upload.array('files', 3), uploadFilesMiddleware,
   visitController.updateVisitById
 );
 
@@ -50,6 +50,60 @@ module.exports = router;
  * tags:
  *   name: Visit
  *   description: APIs for managing sansthan data
+ */
+
+/**
+ * @swagger
+ * /visit/update:
+ *   patch:
+ *     summary: Upload multiple files
+ *     description: Upload multiple files to Google Cloud Storage and save their URLs to the database
+ *     tags: [Visit]
+ *     parameters:
+ *       - in: query
+ *         name: standard
+ *         schema:
+ *           type: string
+ *         description: Standard of the school
+ *       - in: query
+ *         name: schoolId
+ *         schema:
+ *           type: string
+ *         description: ID of the school
+ *       - in: query
+ *         name: trainerId
+ *         schema:
+ *           type: string
+ *         description: ID of the trainer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Successful upload
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fileUrls:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     example: https://storage.googleapis.com/bucket-name/file-name.jpg
+ *       400:
+ *         description: No files uploaded
+ *       500:
+ *         description: Error uploading files or saving URLs to the database
  */
 
 /**

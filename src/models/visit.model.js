@@ -29,15 +29,7 @@ const visitSchema = new mongoose.Schema(
       type: String,
       default: 'pending',
     },
-    file: {
-      type: String,
-    },
-    file1: {
-      type: String,
-    },
-    file2: {
-      type: String,
-    },
+    files: [{ type: String }],
     isCLosedVisit: {
       type: Boolean,
       defualt: false,
