@@ -21,6 +21,21 @@ const studentShema = mongoose.Schema(
     gender: {
       type: String,
     },
+    schoolName: {
+      type: String,
+    },
+    about: {
+      type: String,
+    },
+    parentName: {
+      type: String,
+    },
+    adharNo: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
     age: {
       type: Number,
     },
