@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Request } = require('../models');
 const ApiError = require('../utils/ApiError');
+const upload = require('../utils/bucket');
 
 /**
  * Create a Teacher
@@ -21,31 +22,9 @@ const createRequest = async (reqBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryRequest = async (filter, options) => {
-  const limit = parseInt(options.limit, 10) || 10;
-  const page = parseInt(options.page, 10) || 1;
-  const skip = (page - 1) * limit;
-  const sortBy = options.sortBy || '';
-
-  const [results, total] = await Promise.all([
-    Request.find(filter).sort(sortBy).skip(skip).limit(limit).exec(),
-    Request.countDocuments(filter),
-  ]);
-
-  const totalPages = Math.ceil(total / limit);
-
-  return {
-    results,
-    total,
-    limit,
-    page,
-    totalPages,
-  };
+  const result = await Request.paginate(filter, options);
+  return result;
 };
-
-// const queryRequest = async (filter, options) => {
-//   const result = await Request.paginate(filter, options);
-//   return result;
-// };
 
 // // Example usage
 // (async () => {
@@ -92,6 +71,7 @@ const deleteRequestById = async (id) => {
   await request.remove();
   return request;
 };
+// upload()
 module.exports = {
   createRequest,
   //   updateTeacherById,

@@ -1,23 +1,24 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
+// const multer = require('multer');
+// const path = require('path');
 const auth = require('../../middlewares/auth');
 const { visitController } = require('../../controllers');
+const { upload, uploadFilesMiddleware } = require('../../utils/bucket');
 
 const router = express.Router();
 
-const uploadPath = path.join(__dirname, '../../uploads');
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, uploadPath);
-  },
-  filename(req, file, cb) {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${uniqueSuffix}-${file.originalname}`);
-  },
-});
+// const uploadPath = path.join(__dirname, '../../uploads');
+// const storage = multer.diskStorage({
+//   destination(req, file, cb) {
+//     cb(null, uploadPath);
+//   },
+//   filename(req, file, cb) {
+//     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+//     cb(null, `${uniqueSuffix}-${file.originalname}`);
+//   },
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
 router
   .route('/')
@@ -35,7 +36,7 @@ router.route('/get/android').get(visitController.getTrainerVisits);
 router.route('/get-trainer-details/:schoolId').get(visitController.getVisitsBySchoolId);
 router.route('/update').patch(
   // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
-  upload.fields([{ name: 'file' }, { name: 'file1' }, { name: 'file2' }]),
+  upload.array('files', 10), uploadFilesMiddleware,
   visitController.updateVisitById
 );
 

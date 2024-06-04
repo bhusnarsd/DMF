@@ -20,6 +20,10 @@ const requestSchema = new mongoose.Schema(
     schoolName: {
       type: String,
     },
+    createdDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
