@@ -27,16 +27,9 @@ const getSchoolIdsAndStudentCount = catchAsync(async (req, res) => {
   const visit = await lifeSkillTrainer.getSchoolIdsAndStudentCount(trainerId);
   res.status(httpStatus.CREATED).send(visit);
 });
-// const updateTeacher = catchAsync(async (req, res) => {
-//   const result = await teacherService.updateTeacherById(req.params.id, req.body);
-//   res.send(result);
-// });
+
 const updateVisitById = catchAsync(async (req, res) => {
   const { schoolId, trainerId } = req.query;
-  // eslint-disable-next-line prettier/prettier
-  // const updateData = req.fileUrls.map(url => ({
-  //   url,
-  // }));
   const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req.updateData);
   res.status(httpStatus.CREATED).send(result);
 });

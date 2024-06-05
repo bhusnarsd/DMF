@@ -83,7 +83,6 @@
 // app.use(errorHandler);
 
 // module.exports = app;
-
 const express = require('express');
 const http = require('http');
 const xss = require('xss-clean');
@@ -100,15 +99,18 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-const Message = require('./models');
 const logger = require('./config/logger');
+
+const Message = require('./models/message.model'); // Ensure this path is correct
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-
-// Connect to MongoDB
-// MongoDB schema and model for chat messages
+const io = socketIo(server, {
+  cors: {
+    origin: '*,', // Allow all origins
+    methods: ['GET', 'POST'],
+  },
+});
 
 // Set up Socket.IO
 io.on('connection', (socket) => {
@@ -116,11 +118,15 @@ io.on('connection', (socket) => {
 
   // Listen for new messages
   socket.on('message', async (data) => {
-    const newMessage = new Message(data);
-    await newMessage.save();
+    try {
+      const newMessage = new Message(data);
+      await newMessage.save();
 
-    // Broadcast the new message to all connected clients
-    io.emit('message', newMessage);
+      // Broadcast the new message to all connected clients
+      io.emit('message', newMessage);
+    } catch (error) {
+      logger.error('Error saving message:', error);
+    }
   });
 
   socket.on('disconnect', () => {

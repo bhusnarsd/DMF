@@ -12,7 +12,6 @@ const sendSMS = async (phoneNumber, otp) => {
     message: `Dear User, Your OTP to reset password at the portal is ${otp} -Eduspark`,
     to: phoneNumber,
   };
-
   try {
     const response = await axios.post(url, data);
     return response.data;
@@ -49,14 +48,6 @@ const verifyOtp = async (mobNumber, otp) => {
 
   return true;
 };
-
-// const smsAlert = new SMSAlert();
-
-// const mobileNumber = '+917798940629'; // Example number in E.164 format
-
-// smsAlert.sendOTPMsg(mobileNumber, 'Your OTP is 123456')
-//   .then(response => console.log('OTP sent successfully:', response))
-//   .catch(error => console.error('Error sending OTP:', error.message));
 
 module.exports = {
   sendSMS,
