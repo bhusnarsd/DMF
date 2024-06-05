@@ -92,6 +92,7 @@ const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
+const socketIo = require('socket.io');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -99,9 +100,34 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const Message = require('./models');
+const logger = require('./config/logger');
 
 const app = express();
 const server = http.createServer(app);
+const io = socketIo(server);
+
+// Connect to MongoDB
+// MongoDB schema and model for chat messages
+
+// Set up Socket.IO
+io.on('connection', (socket) => {
+  logger.info('A user connected');
+
+  // Listen for new messages
+  socket.on('message', async (data) => {
+    const newMessage = new Message(data);
+    await newMessage.save();
+
+    // Broadcast the new message to all connected clients
+    io.emit('message', newMessage);
+  });
+
+  socket.on('disconnect', () => {
+    logger.info('A user disconnected');
+  });
+});
+
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);

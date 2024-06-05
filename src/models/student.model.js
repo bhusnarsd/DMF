@@ -11,6 +11,9 @@ const studentShema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    email: {
+      type: String,
+    },
     studentId: {
       type: String,
     },
@@ -34,6 +37,9 @@ const studentShema = mongoose.Schema(
       type: String,
     },
     address: {
+      type: String,
+    },
+    city: {
       type: String,
     },
     age: {

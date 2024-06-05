@@ -49,7 +49,6 @@ router.route('/delete/:id').delete(lifeSkillController.deleteVisit);
 router.route('/get-by/:id').get(lifeSkillController.getVisitById);
 module.exports = router;
 
-
 /**
  * @swagger
  * tags:

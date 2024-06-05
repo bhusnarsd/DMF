@@ -18,10 +18,10 @@ const getTrainerVisits = catchAsync(async (req, res) => {
 
 const updateVisitById = catchAsync(async (req, res) => {
   const { schoolId, standard, trainerId } = req.query;
+  // eslint-disable-next-line prettier/prettier
   const updateData = req.fileUrls.map(url => ({
     url,
   }));
-  console.log(updateData)
   const result = await visitService.updateVisitById(schoolId, standard, trainerId, updateData);
   res.status(httpStatus.CREATED).send(result);
 });
