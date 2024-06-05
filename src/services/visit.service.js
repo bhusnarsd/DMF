@@ -186,7 +186,7 @@ const updateVisitById = async (schoolId, standard, trainer, updateData) => {
 
   // Update the visit document with new file URLs
   // eslint-disable-next-line prettier/prettier
-  result.files = updateData.map(data => data.url);
+  result.files = updateData
   await result.save();
 
   // Re-fetch the visit document after update

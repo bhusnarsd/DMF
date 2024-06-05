@@ -34,10 +34,10 @@ const getSchoolIdsAndStudentCount = catchAsync(async (req, res) => {
 const updateVisitById = catchAsync(async (req, res) => {
   const { schoolId, trainerId } = req.query;
   // eslint-disable-next-line prettier/prettier
-  const updateData = req.fileUrls.map(url => ({
-    url,
-  }));
-  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, updateData);
+  // const updateData = req.fileUrls.map(url => ({
+  //   url,
+  // }));
+  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req.updateData);
   res.status(httpStatus.CREATED).send(result);
 });
 
