@@ -40,7 +40,8 @@ router.route('/get/android').get(lifeSkillController.getTrainerVisits);
 
 router.route('/update').patch(
   // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
-  upload.array('files', 3), uploadFilesMiddleware,
+  upload.array('files', 3),
+  uploadFilesMiddleware,
   lifeSkillController.updateVisitById
 );
 

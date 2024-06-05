@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
-const { Student, User, Visit, Synopsis } = require('../models');
+const { Student, User, Visit } = require('../models');
 const ApiError = require('../utils/ApiError');
 const admin = require('../utils/firebase');
 
@@ -156,13 +156,16 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
     },
   ]);
   const schoolCount = new Set(schoolStandardPairs.map((pair) => pair.schoolId)).size;
-  const startedSchools = await Synopsis.distinct('schoolId').then((schoolIds) => schoolIds.length);
-  const counsellingCount = await Synopsis.countDocuments();
+  // const startedSchools = await Synopsis.distinct('schoolId').then((schoolIds) => schoolIds.length);
+  // const counsellingCount = await Synopsis.countDocuments();
+
+  const upcommingAssingedSchool = await Visit.countDocuments({ trainer: trainerId, status: 'pending' });
+  const completedVisitCount = await Visit.countDocuments({ trainer: trainerId, status: 'completed' });
   return {
     studentCounts: studentCounts.reduce((acc, curr) => acc + curr.studentCount, 0),
     schoolCount,
-    startedSchools,
-    counsellingCount,
+    upcommingAssingedSchool,
+    completedVisitCount,
   };
 };
 

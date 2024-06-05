@@ -4,7 +4,7 @@ const Jwt = require('jsonwebtoken');
 const httpStatus = require('http-status');
 const { createObjectCsvWriter } = require('csv-writer');
 const path = require('path');
-const { Student, User, Assessment } = require('../models');
+const { Student, User, Assessment, School } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const bulkUpload = async (studentArray, csvFilePath = null) => {
@@ -73,6 +73,7 @@ function generateStudentId() {
  */
 const createStudent = async (reqBody) => {
   const studentId = generateStudentId();
+  const school = await School.findOne({schoolId: reqBody.schoolId}).select('name');
   await User.create({
     firstName: reqBody.firstName,
     lastName: reqBody.lastname,
@@ -82,6 +83,7 @@ const createStudent = async (reqBody) => {
     role: 'student',
   });
   reqBody.studentId = studentId;
+  reqBody.schoolName = school.name
   reqBody.password = 'admin@123';
   return Student.create(reqBody);
 };

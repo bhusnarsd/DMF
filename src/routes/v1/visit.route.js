@@ -36,7 +36,8 @@ router.route('/get/android').get(visitController.getTrainerVisits);
 router.route('/get-trainer-details/:schoolId').get(visitController.getVisitsBySchoolId);
 router.route('/update').patch(
   // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
-  upload.array('files', 3), uploadFilesMiddleware,
+  upload.array('files', 3),
+  uploadFilesMiddleware,
   visitController.updateVisitById
 );
 

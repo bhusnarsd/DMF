@@ -4,7 +4,7 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
-const { smsAlert, createOtp, generateOTP, verifyOtp } = require('./otp.service');
+const { sendSMS, createOtp, generateOTP, verifyOtp } = require('./otp.service');
 
 /**
  * Login with username and password
@@ -70,9 +70,9 @@ const initiatePasswordReset = async (username) => {
   }
   const { mobileNumber } = user;
   const otp = generateOTP();
-  const message = `Your OTP for password reset is ${otp}. It is valid for 5 minutes. Do not share this OTP with anyone.`;
+  // const message = `Your OTP for password reset is ${otp}. It is valid for 5 minutes. Do not share this OTP with anyone.`;
 
-  await smsAlert.sendOTPMsg(mobileNumber, message);
+  await sendSMS(mobileNumber, otp);
   await createOtp(mobileNumber, otp);
   // } catch (error) {
   //   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Could not initiate password reset');
