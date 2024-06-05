@@ -112,21 +112,18 @@ const io = socketIo(server, {
   },
 });
 
-// Set up Socket.IO
 io.on('connection', (socket) => {
   logger.info('A user connected');
 
-  // Listen for new messages
   socket.on('message', async (data) => {
-    try {
-      const newMessage = new Message(data);
-      await newMessage.save();
+    const newMessage = new Message({
+      sender: data.sender,
+      recipient: data.recipient,
+      content: data.content,
+    });
+    await newMessage.save();
 
-      // Broadcast the new message to all connected clients
-      io.emit('message', newMessage);
-    } catch (error) {
-      logger.error('Error saving message:', error);
-    }
+    io.to(data.recipient).emit('message', newMessage);
   });
 
   socket.on('disconnect', () => {
