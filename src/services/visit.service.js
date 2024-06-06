@@ -135,6 +135,10 @@ const getVisitById = async (id) => {
   return Visit.findById(id);
 };
 
+const getTrainerDetails = async (schoolId, standard) => {
+  return Visit.findOne({ schoolId, standard });
+};
+
 const getSchoolIdsAndStudentCount = async (trainerId) => {
   const visits = await Visit.find({ trainer: mongoose.Types.ObjectId(trainerId) }).select('schoolId standard');
   const schoolStandardPairs = visits.map((visit) => ({ schoolId: visit.schoolId, standard: visit.standard }));
@@ -233,4 +237,5 @@ module.exports = {
   updateVisitById,
   scheduleVisit,
   deleteVisit,
+  getTrainerDetails,
 };

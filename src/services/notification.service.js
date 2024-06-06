@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Notification } = require('../models');
 const ApiError = require('../utils/ApiError');
+const Message = require('../models/message.model');
 
 const createNotification = async (notificationData) => {
   return Notification.create(notificationData);
@@ -23,6 +24,11 @@ const markAsRead = async (userId) => {
   return result;
 };
 
+const getChatistory = async (sender, recipient) => {
+  const chatHistory = await Message.find({ sender, recipient });
+  return chatHistory;
+};
+
 /**
  * Delete user by id
  * @param {ObjectId} schoolId
@@ -42,4 +48,5 @@ module.exports = {
   getNotificationsByUserId,
   markAsRead,
   deleteNotificationById,
+  getChatistory,
 };

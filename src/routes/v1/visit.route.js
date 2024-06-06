@@ -27,6 +27,9 @@ router
 // .get(studentvisitControllerController.getAllStudent);
 router.route('/get-dashboard-counts').get(visitController.getSchoolIdsAndStudentCount);
 // router.route('/genrate-token').get(studentController.generateToken);
+
+router.route('/get-trainer-details').get(visitController.getTrainerDetails);
+
 router
   .route('/get')
   .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'), visitController.getTrainerVisits);

@@ -16,6 +16,11 @@ const markNotificationAsRead = catchAsync(async (req, res) => {
   const notification = await notificationService.markAsRead(req.params.userId);
   res.send(notification);
 });
+const chatHistory = catchAsync(async (req, res) => {
+  const { sender, recipient } = req.query;
+  const chat = await notificationService.getChatistory(sender, recipient);
+  res.send(chat);
+});
 
 const deleteNotificationById = catchAsync(async (req, res) => {
   const notification = await notificationService.deleteNotificationById(req.params.id);
@@ -25,5 +30,6 @@ module.exports = {
   createNotification,
   getNotifications,
   markNotificationAsRead,
+  chatHistory,
   deleteNotificationById,
 };

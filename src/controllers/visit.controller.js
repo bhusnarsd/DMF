@@ -47,6 +47,12 @@ const getVisitById = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(visit);
 });
 
+const getTrainerDetails = catchAsync(async (req, res) => {
+  const { schoolId, standard } = req.query;
+  const visit = await visitService.getTrainerDetails(schoolId, standard);
+  res.status(httpStatus.CREATED).send(visit);
+});
+
 const deleteVisit = catchAsync(async (req, res) => {
   const result = await visitService.deleteVisit(req.params.id);
   res.send(result);
@@ -66,4 +72,5 @@ module.exports = {
   deleteVisit,
   addInOutTIme,
   getVisitById,
+  getTrainerDetails,
 };
