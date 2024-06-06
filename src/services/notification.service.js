@@ -25,7 +25,12 @@ const markAsRead = async (userId) => {
 };
 
 const getChatistory = async (sender, recipient) => {
-  const chatHistory = await Message.find({ sender, recipient });
+  const chatHistory = await Message.find({
+    $or: [
+      { sender, recipient },
+      { sender: recipient, recipient: sender },
+    ],
+  });
   return chatHistory;
 };
 
