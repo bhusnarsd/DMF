@@ -137,7 +137,13 @@ const getVisitById = async (id) => {
 
 const getTrainerDetails = async (studentId) => {
   const student = await Student.findOne({ studentId });
+  if (!student) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  }
   const visitData = await Visit.findOne({ schoolId: student.schoolId, standard: student.standard });
+  if (!visitData) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
+  }
   const tarinerDetails = await User.findOne({ _id: visitData.trainer });
   return { tarinerDetails, visitData };
 };
