@@ -15,9 +15,9 @@ router
     notificationController.getNotifications
   );
 
-router.route('/:userId').patch(notificationController.markNotificationAsRead);
-
 router.route('/chat-history').get(notificationController.chatHistory);
+
+router.route('/:userId').patch(notificationController.markNotificationAsRead);
 
 router.route('/delete/:id').delete(notificationController.deleteNotificationById);
 module.exports = router;
