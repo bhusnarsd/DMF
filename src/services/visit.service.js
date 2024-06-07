@@ -242,7 +242,7 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
  * @param {Object} updateBody
  * @returns {Promise<Visit>}
  */
-const updateVisitById = async (schoolId, standard, trainer, updateData) => {
+const updateVisitById = async (schoolId, standard, trainer, req) => {
   const result = await Visit.findOne({ schoolId, standard, trainer });
   // console.log(schoolId, standard, trainerId )
   if (!result) {
@@ -250,12 +250,12 @@ const updateVisitById = async (schoolId, standard, trainer, updateData) => {
   }
 
   // Check if inTime is already set and updateData contains inTime
-  if (updateData.inTime && result.inTime) {
+  if (req.updateData.inTime && result.inTime) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'inTime already set');
   }
 
   // Check if outTime is already set and updateData contains outTime
-  if (updateData.outTime && result.outTime) {
+  if (req.updateData.outTime && result.outTime) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'outTime already set');
   }
   // Update the visit document with new file URLs
@@ -264,10 +264,15 @@ const updateVisitById = async (schoolId, standard, trainer, updateData) => {
   //   result[key] = updateData[key];
   // }
   // await result.save();
-
   // Update the visit document with new file URLs
   // eslint-disable-next-line prettier/prettier
-  result.files = updateData
+  if(req.updateData)  result.files = req.updateData;
+  // Update the visit document with new data from req.body
+  if (req.body) {
+    for (const key in req.body) {
+      result[key] = req.body[key];
+    }
+  }
   await result.save();
 
   // Re-fetch the visit document after update

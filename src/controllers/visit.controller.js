@@ -28,13 +28,13 @@ const updateVisitById = catchAsync(async (req, res) => {
   // const updateData = req.fileUrls.map(url => ({
   //   url,
   // }));
-  const result = await visitService.updateVisitById(schoolId, standard, trainerId, req.updateData);
+  const result = await visitService.updateVisitById(schoolId, standard, trainerId, req);
   res.status(httpStatus.CREATED).send(result);
 });
 
 const addInOutTIme = catchAsync(async (req, res) => {
   const { schoolId, standard, trainerId } = req.query;
-  const result = await visitService.updateVisitById(schoolId, standard, trainerId, req.body);
+  const result = await visitService.updateVisitById(schoolId, standard, trainerId, req);
   res.status(httpStatus.CREATED).send(result);
 });
 const getVisitsBySchoolId = catchAsync(async (req, res) => {

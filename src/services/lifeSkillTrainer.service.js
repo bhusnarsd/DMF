@@ -184,7 +184,7 @@ const getSchoolIdsAndStudentCount = async (trainerId) => {
  * @returns {Promise<Visit>}
  */
 
-const updateVisitById = async (schoolId, trainer, updateData) => {
+const updateVisitById = async (schoolId, trainer, req) => {
   const result = await LifeTrainerVisit.findOne({ schoolId, trainer });
   // console.log(schoolId, standard, trainerId )
   if (!result) {
@@ -201,7 +201,13 @@ const updateVisitById = async (schoolId, trainer, updateData) => {
   }
   // Update the visit document with new file URLs
   // eslint-disable-next-line prettier/prettier
-  result.files = updateData
+  if(req.updateData)  result.files = req.updateData;
+  // Update the visit document with new data from req.body
+  if (req.body) {
+    for (const key in req.body) {
+      result[key] = req.body[key];
+    }
+  }
   await result.save();
 
   // Re-fetch the visit document after update

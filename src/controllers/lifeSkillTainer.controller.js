@@ -30,13 +30,13 @@ const getSchoolIdsAndStudentCount = catchAsync(async (req, res) => {
 
 const updateVisitById = catchAsync(async (req, res) => {
   const { schoolId, trainerId } = req.query;
-  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req.updateData);
+  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req);
   res.status(httpStatus.CREATED).send(result);
 });
 
 const addInOutTIme = catchAsync(async (req, res) => {
   const { schoolId, trainerId } = req.query;
-  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req.body);
+  const result = await lifeSkillTrainer.updateVisitById(schoolId, trainerId, req);
   res.status(httpStatus.CREATED).send(result);
 });
 
