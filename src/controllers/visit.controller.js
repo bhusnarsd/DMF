@@ -16,6 +16,12 @@ const getTrainerVisits = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(visit);
 });
 
+const getTrainerVisitsAndroid = catchAsync(async (req, res) => {
+  const { trainerId, status } = req.query;
+  const visit = await visitService.getTrainerVisitsAndroid(trainerId, status);
+  res.status(httpStatus.CREATED).send(visit);
+});
+
 const updateVisitById = catchAsync(async (req, res) => {
   const { schoolId, standard, trainerId } = req.query;
   // eslint-disable-next-line prettier/prettier
@@ -76,4 +82,5 @@ module.exports = {
   addInOutTIme,
   getVisitById,
   getTrainerDetails,
+  getTrainerVisitsAndroid,
 };

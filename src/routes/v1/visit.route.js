@@ -34,7 +34,7 @@ router
   .route('/get')
   .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'), visitController.getTrainerVisits);
 
-router.route('/get/android').get(visitController.getTrainerVisits);
+router.route('/get/android').get(visitController.getTrainerVisitsAndroid);
 
 router.route('/get-trainer-details/:schoolId').get(visitController.getVisitsBySchoolId);
 router.route('/update').patch(
