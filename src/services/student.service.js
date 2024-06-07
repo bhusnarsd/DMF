@@ -6,6 +6,7 @@ const { createObjectCsvWriter } = require('csv-writer');
 const path = require('path');
 const { Student, User, Assessment, School } = require('../models');
 const ApiError = require('../utils/ApiError');
+const Message = require('../models/message.model');
 
 const bulkUpload = async (studentArray, csvFilePath = null) => {
   let modifiedStudentsArray = studentArray;
@@ -144,20 +145,55 @@ const queryStudent = async (filter, options) => {
   return response;
 };
 
+// const getStudentAssessments = async (schoolId, standard) => {
+//   // Convert schoolId to string for consistent comparison
+//   const schoolIdStr = schoolId;
+
+//   // Find students by schoolId and standard
+//   const students = await Student.find({ schoolId: schoolIdStr, standard });
+
+//   // Extract studentIds from the found students
+//   const studentIds = students.map((student) => student.studentId);
+
+//   // Find assessments by studentIds
+//   const message = await Message.find({ sender: { $in: studentIds }, status: 'unread' });
+//   const assessments = await Assessment.find({ studentId: { $in: studentIds } });
+//   const response = students.map((student) => {
+//     const studentAssessment = assessments.find((assessment) => assessment.studentId === student.studentId);
+//     return {
+//       studentId: student.studentId,
+//       firstName: student.firstName,
+//       lastName: student.lastName,
+//       gender: student.gender,
+//       age: student.age,
+//       assessmentStatus: studentAssessment ? studentAssessment.status : 'non-started',
+//       id: student.id,
+//     };
+//   });
+
+//   return response;
+// };
+
 const getStudentAssessments = async (schoolId, standard) => {
   // Convert schoolId to string for consistent comparison
   const schoolIdStr = schoolId;
-
   // Find students by schoolId and standard
   const students = await Student.find({ schoolId: schoolIdStr, standard });
-
   // Extract studentIds from the found students
   const studentIds = students.map((student) => student.studentId);
-
   // Find assessments by studentIds
   const assessments = await Assessment.find({ studentId: { $in: studentIds } });
+  // Find unread messages by studentIds
+  const messages = await Message.find({ sender: { $in: studentIds }, status: 'unread' });
+  // Compute unread message count for each student
+  const unreadCountMap = messages.reduce((acc, message) => {
+    acc[message.sender] = (acc[message.sender] || 0) + 1;
+    return acc;
+  }, {});
+  // Create the response with student details, assessment status, and unread message count
   const response = students.map((student) => {
     const studentAssessment = assessments.find((assessment) => assessment.studentId === student.studentId);
+    const unreadCount = unreadCountMap[student.studentId] || 0;
     return {
       studentId: student.studentId,
       firstName: student.firstName,
@@ -166,12 +202,12 @@ const getStudentAssessments = async (schoolId, standard) => {
       age: student.age,
       assessmentStatus: studentAssessment ? studentAssessment.status : 'non-started',
       id: student.id,
+      unreadMessageCount: unreadCount,
     };
   });
 
   return response;
 };
-
 // (async () => {
 //   const schoolId = 'SCH636454';
 //   const standard = '12'; // Replace with actual school ID

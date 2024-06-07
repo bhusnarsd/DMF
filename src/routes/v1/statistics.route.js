@@ -21,7 +21,10 @@ router
 
 router
   .route('/get-by-school/admin-dashboard')
-  .get(auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'), statisticController.getSchoolStatistics);
+  .get(
+    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'cluster', 'department'),
+    statisticController.getSchoolStatistics
+  );
 
 router
   .route('/get-by-filters')
