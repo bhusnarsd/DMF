@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
-const { Student, User, Visit, School, Message } = require('../models');
+const { Student, User, Visit, School } = require('../models');
 const ApiError = require('../utils/ApiError');
 const admin = require('../utils/firebase');
 
@@ -107,6 +107,7 @@ const getTrainerVisitsAndroid = async (trainerId, status) => {
   const visits = await Visit.aggregate(pipeline);
   return visits;
 };
+
 const getTrainerVisits = async (trainerId, status) => {
   const pipeline = [];
 
@@ -149,34 +150,7 @@ const getTrainerVisits = async (trainerId, status) => {
   );
 
   const visits = await Visit.aggregate(pipeline);
-
-  // Find school IDs from the visits
-  const schoolIds = visits.map(visit => visit.school.schoolId);
-
-  // Find students by schoolIds and extract their studentIds
-  const students = await Student.find({ schoolId: { $in: schoolIds } });
-  const studentIds = students.map(student => student.studentId);
-
-  // Find unread messages by studentIds
-  const messages = await Message.find({ sender: { $in: studentIds }, status: 'unread' });
-
-  // Compute unread message count for each school
-  const unreadCountMap = messages.reduce((acc, message) => {
-    const schoolId = students.find(student => student.studentId === message.sender).schoolId;
-    acc[schoolId] = (acc[schoolId] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Add unread message count to the visits
-  const response = visits.map(visit => {
-    const unreadMessageCount = unreadCountMap[visit.school.schoolId] || 0;
-    return {
-      ...visit,
-      unreadMessageCount,
-    };
-  });
-
-  return response;
+  return visits;
 };
 
 const getVisitsBySchoolId = async (schoolId) => {
