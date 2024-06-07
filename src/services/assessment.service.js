@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 const httpStatus = require('http-status');
-const { Assessment, Student } = require('../models');
+const { Assessment, Student, School } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -14,8 +14,16 @@ const createAssessment = async (reqBody) => {
   let assessment = await Assessment.findOne({ studentId: reqBody.studentId });
   const school = await Student.findOne({ studentId: reqBody.studentId }).select('schoolId standard');
   // If assessment found, update it with the new data
+  const schoolData = await School.find({ schoolId: school.SchoolId }).select('cluster');
+  // Create new visit
+  let cluster = '';
+  if (school) {
+    cluster = schoolData.cluster;
+  }
   reqBody.SchoolId = school.SchoolId;
   reqBody.standard = school.standard;
+  reqBody.cluster = cluster;
+  // reqBody.cluster =
   if (assessment) {
     assessment = await Assessment.findOneAndUpdate(
       { studentId: reqBody.studentId },

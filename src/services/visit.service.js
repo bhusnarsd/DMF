@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
-const { Student, User, Visit } = require('../models');
+const { Student, User, Visit, School } = require('../models');
 const ApiError = require('../utils/ApiError');
 const admin = require('../utils/firebase');
 
@@ -28,6 +28,12 @@ const scheduleVisit = async (trainerId, schoolId, visitDate, time, standard) => 
   if (existingVisit) {
     throw new ApiError(httpStatus.CONFLICT, 'Visit scheduled already found');
   }
+  const school = await School.find({ schoolId }).select('cluster');
+  // Create new visit
+  let cluster = '';
+  if (school) {
+    cluster = school.cluster;
+  }
 
   // Create new visit
   const visit = new Visit({
@@ -35,6 +41,7 @@ const scheduleVisit = async (trainerId, schoolId, visitDate, time, standard) => 
     schoolId,
     visitDate,
     time,
+    cluster,
     standard,
   });
   await visit.save();

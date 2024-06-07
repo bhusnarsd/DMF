@@ -82,6 +82,9 @@ const assessmentSchema = mongoose.Schema(
     schoolId: {
       type: String,
     },
+    cluster: {
+      type: String,
+    },
     score: {
       type: Map,
       of: Number,

@@ -27,7 +27,7 @@ const createSchool = catchAsync(async (req, res) => {
 });
 
 const getSchools = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'schoolId']);
+  const filter = pick(req.query, ['name', 'schoolId', 'cluster']);
   const options = pick(req.query, ['sortBy', 'limit', 'page', 'reverse']);
   const result = await schoolService.querySchool(filter, options);
   res.send(result);

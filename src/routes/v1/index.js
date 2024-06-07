@@ -15,6 +15,7 @@ const synopsisRoute = require('./synopsis.route');
 const skillTrainerRoute = require('./lifeSkillTrainer.route');
 const reqLifeTrainerRoute = require('./reqLifeTrainer.route');
 const notificationRoute = require('./notification.route');
+const clusterRoute = require('./cluster.route');
 
 const router = express.Router();
 
@@ -74,6 +75,10 @@ const defaultRoutes = [
   {
     path: '/notification',
     route: notificationRoute,
+  },
+  {
+    path: '/cluster',
+    route: clusterRoute,
   },
 ];
 

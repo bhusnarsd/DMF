@@ -16,6 +16,9 @@ const visitSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    cluster: {
+      type: String,
+    },
     time: {
       type: String,
     },

@@ -2,7 +2,7 @@
 // const httpStatus = require('http-status');
 const axios = require('axios');
 const { Otp } = require('../models');
-const config = require('../config/config');
+// const config = require('../config/config');
 // const ApiError = require('../utils/ApiError');
 
 // const sendSMS = async (phoneNumber, otp) => {
