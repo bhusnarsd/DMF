@@ -156,44 +156,29 @@ const getTrainerVisits = async (trainerId, status) => {
       },
     },
     {
-      $addFields: {
-        unreadMessages: {
-          $filter: {
-            input: '$messages',
-            as: 'message',
-            cond: { $eq: ['$$message.status', 'unread'] },
-          },
-        },
-      },
+      $unwind: '$messages',
     },
     {
-      $addFields: {
-        unreadMessageCount: { $size: '$unreadMessages' },
-      },
-    },
-    {
-      $project: {
-        _id: 1,
-        visitDate: 1,
-        time: 1,
-        standard: 1,
-        status: 1,
-        createdAt: 1,
-        school: 1,
-        unreadMessageCount: 1,
+      $match: {
+        'messages.status': 'unread',
       },
     },
     {
       $group: {
-        _id: '$school.schoolId',
-        visits: { $push: '$$ROOT' },
-        totalUnreadMessages: { $sum: '$unreadMessageCount' },
+        _id: null, // Group all documents together to get a single count
+        totalUnreadMessages: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        _id: 0, // Remove the _id field from the result
+        totalUnreadMessages: 1,
       },
     }
   );
 
   const visits = await Visit.aggregate(pipeline);
-  return visits;
+  return visits.length > 0 ? visits[0] : { totalUnreadMessages: 0 };
 };
 
 const getVisitsBySchoolId = async (schoolId) => {
