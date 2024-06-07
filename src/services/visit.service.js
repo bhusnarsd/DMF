@@ -171,7 +171,13 @@ const getTrainerVisits = async (trainerId, status) => {
     },
     {
       $project: {
-        _id: 0, // Remove the _id field from the result
+        _id: 1,
+        visitDate: 1,
+        time: 1,
+        standard: 1,
+        status: 1,
+        createdAt: 1,
+        school: '$school',
         totalUnreadMessages: 1,
       },
     }
