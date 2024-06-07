@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const messageSchema = new mongoose.Schema(
+const newsLetterSchema = new mongoose.Schema(
   {
     titel: {
       type: String,
@@ -12,5 +12,5 @@ const messageSchema = new mongoose.Schema(
   }
 );
 
-const Message = mongoose.model('Message', messageSchema);
-module.exports = Message;
+const NewsLetter = mongoose.model('NewsLetter', newsLetterSchema);
+module.exports = NewsLetter;
