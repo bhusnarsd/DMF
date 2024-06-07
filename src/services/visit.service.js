@@ -250,12 +250,12 @@ const updateVisitById = async (schoolId, standard, trainer, req) => {
   }
 
   // Check if inTime is already set and updateData contains inTime
-  if (req.updateData.inTime && result.inTime) {
+  if (req.body.inTime && result.inTime) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'inTime already set');
   }
 
   // Check if outTime is already set and updateData contains outTime
-  if (req.updateData.outTime && result.outTime) {
+  if (req.body.outTime && result.outTime) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'outTime already set');
   }
   // Update the visit document with new file URLs
