@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { ReqLifeTrainer } = require('../models');
+const { ReqLifeTrainer, School } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const queryRequest = async (filter, options) => {
@@ -29,6 +29,8 @@ const queryRequest = async (filter, options) => {
  * @returns {Promise<Request>}
  */
 const createRequest = async (reqBody) => {
+  const school = await School.findOne({ schoolId: reqBody.schoolId }).select('cluster');
+  reqBody.cluster = school.cluster;
   return ReqLifeTrainer.create(reqBody);
 };
 

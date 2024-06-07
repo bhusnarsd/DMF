@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
-const { Request } = require('../models');
+const { Request, School } = require('../models');
 const ApiError = require('../utils/ApiError');
-const upload = require('../utils/bucket');
 
 /**
  * Create a Teacher
@@ -9,6 +8,8 @@ const upload = require('../utils/bucket');
  * @returns {Promise<Request>}
  */
 const createRequest = async (reqBody) => {
+  const school = await School.findOne({ schoolId: reqBody.schoolId }).select('cluster');
+  reqBody.cluster = school.cluster;
   return Request.create(reqBody);
 };
 

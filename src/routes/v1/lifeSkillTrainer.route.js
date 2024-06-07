@@ -22,7 +22,7 @@ const router = express.Router();
 router
   .route('/')
   .post(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department', 'skillTrainer'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department', 'skillTrainer'),
     lifeSkillController.createSchedule
   );
 router.route('/get-dashboard-counts').get(lifeSkillController.getSchoolIdsAndStudentCount);
@@ -30,7 +30,7 @@ router.route('/get-dashboard-counts').get(lifeSkillController.getSchoolIdsAndStu
 router
   .route('/get')
   .get(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department', 'skillTrainer'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department', 'skillTrainer'),
     lifeSkillController.getTrainerVisits
   );
 
