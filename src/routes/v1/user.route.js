@@ -9,12 +9,12 @@ const router = express.Router();
 router
   .route('/')
   .post(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
     validate(userValidation.createUser),
     userController.createUser
   )
   .get(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'cluster', 'department'),
     validate(userValidation.getUsers),
     userController.getUsers
   );
@@ -22,24 +22,24 @@ router
 router
   .route('/create-trianer')
   .post(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
     validate(userValidation.createTainer),
     userController.createTrainer
   );
 router
   .route('/:userId')
   .get(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
     validate(userValidation.getUser),
     userController.getUser
   )
   .patch(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
     validate(userValidation.updateUser),
     userController.updateUser
   )
   .delete(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
     validate(userValidation.deleteUser),
     userController.deleteUser
   );

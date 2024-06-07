@@ -8,13 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('superadmin', 'school', 'department'), reqLifeTrainerController.createRequest)
-  .get(auth('superadmin', 'school', 'department'), reqLifeTrainerController.queryRequest);
+  .post(auth('superadmin', 'school', 'cluster', 'department'), reqLifeTrainerController.createRequest)
+  .get(auth('superadmin', 'school', 'cluster', 'department'), reqLifeTrainerController.queryRequest);
 router
   .route('/:id')
-  .get(auth('superadmin', 'school', 'department'), reqLifeTrainerController.getRequestById)
+  .get(auth('superadmin', 'school', 'cluster', 'department'), reqLifeTrainerController.getRequestById)
   .delete(
-    auth('superadmin', 'district_officer', 'division_officer', 'state_officer', 'block_officer'),
+    auth('superadmin', 'district_officer', 'division_officer', 'cluster', 'state_officer', 'block_officer'),
     reqLifeTrainerController.deleteRequestById
   );
 module.exports = router;
