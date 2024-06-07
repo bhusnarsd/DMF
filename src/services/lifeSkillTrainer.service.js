@@ -190,10 +190,20 @@ const updateVisitById = async (schoolId, trainer, updateData) => {
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Visit not found');
   }
+  // Check if inTime is already set and updateData contains inTime
+  if (updateData.inTime && result.inTime) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'inTime already set');
+  }
 
+  // Check if outTime is already set and updateData contains outTime
+  if (updateData.outTime && result.outTime) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'outTime already set');
+  }
   // Update the visit document with new file URLs
   // eslint-disable-next-line prettier/prettier
-  result.files = updateData;
+  for (const key in updateData) {
+    result[key] = updateData[key];
+  }
   await result.save();
 
   // Re-fetch the visit document after update

@@ -9,7 +9,10 @@ const { Student, Assessment, User, Visit, School, LifeTrainerVisit } = require('
  */
 
 const getStatistClusterDash = async (cluster) => {
-  const totalStudents = await Student.countDocuments({ cluster });
+  const schools = await School.find({ cluster }).select('schoolId');
+  const schoolIds = schools.map((school) => school.schoolId);
+
+  const totalStudents = await Student.countDocuments({ schoolId: { $in: schoolIds } });
   const totalCounsellor = await User.countDocuments({ cluster, role: 'trainer' });
   const totalLifeSkillTrainer = await User.countDocuments({ cluster, role: 'skillTrainer' });
   const visitsPendingTrainer = await LifeTrainerVisit.countDocuments({ status: 'pending', cluster });
