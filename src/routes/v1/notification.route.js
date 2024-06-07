@@ -7,11 +7,11 @@ const router = express.Router();
 router
   .route('/')
   .post(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department', 'skillTrainer'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department', 'skillTrainer'),
     notificationController.createNotification
   )
   .get(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department', 'skillTrainer'),
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department', 'skillTrainer'),
     notificationController.getNotifications
   );
 
