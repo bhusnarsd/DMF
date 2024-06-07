@@ -31,6 +31,10 @@ const envVarsSchema = Joi.object()
     SMS_SENDERID: Joi.string(),
     SMS_TEMPLETID: Joi.string(),
     FIREBASE_SERVICE_ACCOUNT: Joi.string().description('Firebase service account JSON string'),
+    // SMS_USERID: Joi.string(),
+    // SMS_SECUREKEY: Joi.string(),
+    // SMS_SENDERID: Joi.string(),
+    SMS_URL: Joi.string().description('The URL for the SMS service'),
   })
   .unknown();
 
@@ -77,11 +81,10 @@ module.exports = {
     region: envVars.REGION,
   },
   SMS: {
-    SMS_USERID: envVars.SMS_USERID,
-    SMS_SECUREKEY: envVars.SMS_SECUREKEY,
-    SMS_SENDERID: envVars.SMS_SENDERID,
-    SMS_TEMPLETID: envVars.SMS_TEMPLETID,
-    SMS_USERPASS: envVars.SMS_USERPASS,
+    userId: envVars.SMS_USERID,
+    secureKey: envVars.SMS_SECUREKEY,
+    senderId: envVars.SMS_SENDERID,
+    url: envVars.SMS_URL,
   },
   firebase: {
     serviceAccount: { firebaseServiceAccount },
