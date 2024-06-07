@@ -63,6 +63,51 @@ const scheduleVisit = async (trainerId, schoolId, visitDate, time, standard) => 
   return visit; // Return the saved visit
 };
 
+// const getTrainerVisits = async (trainerId, status) => {
+//   const pipeline = [];
+
+//   if (status) {
+//     // If status is provided, filter by both trainerId and status
+//     pipeline.push({
+//       $match: { trainer: mongoose.Types.ObjectId(trainerId), status },
+//     });
+//   } else {
+//     // If status is not provided, filter only by trainerId
+//     pipeline.push({
+//       $match: { trainer: mongoose.Types.ObjectId(trainerId) },
+//     });
+//   }
+
+//   // Add remaining aggregation stages
+//   pipeline.push(
+//     {
+//       $lookup: {
+//         from: 'schools',
+//         localField: 'schoolId',
+//         foreignField: 'schoolId',
+//         as: 'school',
+//       },
+//     },
+//     {
+//       $unwind: '$school',
+//     },
+//     {
+//       $project: {
+//         _id: 1,
+//         visitDate: 1,
+//         time: 1,
+//         standard: 1,
+//         status: 1,
+//         createdAt: 1,
+//         school: '$school',
+//       },
+//     }
+//   );
+
+//   const visits = await Visit.aggregate(pipeline);
+//   return visits;
+// };
+
 const getTrainerVisits = async (trainerId, status) => {
   const pipeline = [];
 
@@ -92,6 +137,41 @@ const getTrainerVisits = async (trainerId, status) => {
       $unwind: '$school',
     },
     {
+      $lookup: {
+        from: 'students',
+        localField: 'schoolId',
+        foreignField: 'schoolId',
+        as: 'students',
+      },
+    },
+    {
+      $unwind: '$students',
+    },
+    {
+      $lookup: {
+        from: 'messages',
+        localField: 'students.studentId',
+        foreignField: 'sender',
+        as: 'messages',
+      },
+    },
+    {
+      $addFields: {
+        unreadMessages: {
+          $filter: {
+            input: '$messages',
+            as: 'message',
+            cond: { $eq: ['$$message.status', 'unread'] },
+          },
+        },
+      },
+    },
+    {
+      $addFields: {
+        unreadMessageCount: { $size: '$unreadMessages' },
+      },
+    },
+    {
       $project: {
         _id: 1,
         visitDate: 1,
@@ -99,7 +179,15 @@ const getTrainerVisits = async (trainerId, status) => {
         standard: 1,
         status: 1,
         createdAt: 1,
-        school: '$school',
+        school: 1,
+        unreadMessageCount: 1,
+      },
+    },
+    {
+      $group: {
+        _id: '$school.schoolId',
+        visits: { $push: '$$ROOT' },
+        totalUnreadMessages: { $sum: '$unreadMessageCount' },
       },
     }
   );
