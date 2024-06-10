@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const newsLetterSchema = new mongoose.Schema(
   {
-    titel: {
+    title: {
       type: String,
     },
     file: {
