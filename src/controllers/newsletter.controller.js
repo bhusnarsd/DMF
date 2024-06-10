@@ -11,7 +11,7 @@ const creatnewsLetter = catchAsync(async (req, res) => {
 });
 
 const getnewsGetNewsletter = catchAsync(async (req, res) => {
-  const result = await newsLetterService.creatnewsLetter(req.body);
+  const result = await newsLetterService.getnewsGetNewsletter(req.body);
   res.status(httpStatus.CREATED).send(result);
 });
 
