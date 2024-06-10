@@ -271,12 +271,14 @@ const updateVisitById = async (schoolId, standard, trainer, req) => {
       result[key] = value;
     }
   }
+  console.log(result)
   if (req.body) {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in req.body) {
       result[key] = req.body[key];
     }
   }
+  console.log(result)
   await result.save();
 
   // Re-fetch the visit document after update
