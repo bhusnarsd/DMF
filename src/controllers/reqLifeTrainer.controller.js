@@ -10,7 +10,7 @@ const createRequest = catchAsync(async (req, res) => {
 });
 
 const queryRequest = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'schoolId']);
+  const filter = pick(req.query, ['name', 'schoolId', 'cluster']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await reqLifeTrainerServices.queryRequest(filter, options);
   res.send(result);
