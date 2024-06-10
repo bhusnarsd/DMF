@@ -9,7 +9,7 @@ router
   .route('/')
   .post(
     auth('admin', 'school', 'superadmin', 'student', 'trainer', 'cluster', 'department', 'skillTrainer'),
-    upload.array('files', 1),
+    upload,
     uploadFilesMiddleware,
     newsletterController.creatnewsLetter
   )

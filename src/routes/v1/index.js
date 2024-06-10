@@ -16,6 +16,7 @@ const skillTrainerRoute = require('./lifeSkillTrainer.route');
 const reqLifeTrainerRoute = require('./reqLifeTrainer.route');
 const notificationRoute = require('./notification.route');
 const clusterRoute = require('./cluster.route');
+const newsletterRoute = require('./newsletter.route');
 
 const router = express.Router();
 
@@ -79,6 +80,10 @@ const defaultRoutes = [
   {
     path: '/cluster',
     route: clusterRoute,
+  },
+  {
+    path: '/news-letter',
+    route: newsletterRoute,
   },
 ];
 

@@ -271,8 +271,6 @@ const updateVisitById = async (schoolId, standard, trainer, req) => {
       result[key] = value;
     }
   }
-  // if(req.updateData)  result.files = req.updateData;
-  // // Update the visit document with new data from req.body
   if (req.body) {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in req.body) {
