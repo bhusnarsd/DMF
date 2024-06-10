@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route('/')
   .post(
-    auth('admin', 'school', 'superadmin', 'student', 'trainer', 'cluster', 'department', 'skillTrainer'),
+    // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'cluster', 'department', 'skillTrainer'),
     upload,
     uploadFilesMiddleware,
     newsletterController.creatnewsLetter

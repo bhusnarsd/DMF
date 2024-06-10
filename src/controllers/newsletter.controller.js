@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { newsLetterService } = require('../services');
 
 const creatnewsLetter = catchAsync(async (req, res) => {
-  req.body.file = req.updateData;
+  req.body.file = req.updateData.file;
   const result = await newsLetterService.creatnewsLetter(req.body);
   res.status(httpStatus.CREATED).send(result);
 });
