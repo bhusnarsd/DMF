@@ -271,22 +271,20 @@ const updateVisitById = async (schoolId, standard, trainer, req) => {
       result[key] = value;
     }
   }
-  console.log(result)
   if (req.body) {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in req.body) {
       result[key] = req.body[key];
     }
   }
-  console.log(result)
   await result.save();
 
   // Re-fetch the visit document after update
   const updatedResult = await Visit.findOne({ schoolId, standard, trainer });
 
   // Check if all conditions are met to set status to 'completed'
-  const { inTime, outTime, inDate, outDate, files } = updatedResult;
-  if (inTime && outTime && inDate && outDate && files.length > 0) {
+  const { inTime, outTime, inDate, outDate, file, file1, file2 } = updatedResult;
+  if (inTime && outTime && inDate && outDate && file && file1 && file2) {
     updatedResult.status = 'completed';
     await updatedResult.save();
   }

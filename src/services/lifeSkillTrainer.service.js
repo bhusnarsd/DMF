@@ -229,8 +229,8 @@ const updateVisitById = async (schoolId, trainer, req) => {
   const updatedResult = await LifeTrainerVisit.findOne({ schoolId, trainer });
 
   // Check if all conditions are met to set status to 'completed'
-  const { inTime, outTime, inDate, outDate, files } = updatedResult;
-  if (inTime && outTime && inDate && outDate && files.length > 0) {
+  const { inTime, outTime, inDate, outDate, file, file1, file2 } = updatedResult;
+  if (inTime && outTime && inDate && outDate && file && file1 && file2) {
     updatedResult.status = 'completed';
     await updatedResult.save();
   }
