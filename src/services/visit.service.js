@@ -265,10 +265,16 @@ const updateVisitById = async (schoolId, standard, trainer, req) => {
   // }
   // await result.save();
   // Update the visit document with new file URLs
-  // eslint-disable-next-line prettier/prettier
-  if(req.updateData)  result.files = req.updateData;
-  // Update the visit document with new data from req.body
+  if (req.updateData) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(req.updateData)) {
+      result[key] = value;
+    }
+  }
+  // if(req.updateData)  result.files = req.updateData;
+  // // Update the visit document with new data from req.body
   if (req.body) {
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in req.body) {
       result[key] = req.body[key];
     }

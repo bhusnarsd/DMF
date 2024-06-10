@@ -5,7 +5,9 @@ const newsLetterSchema = new mongoose.Schema(
     titel: {
       type: String,
     },
-    files: [{ type: String }],
+    file: {
+      type: String,
+    },
   },
   {
     timestamps: true,

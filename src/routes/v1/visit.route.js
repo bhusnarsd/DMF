@@ -22,7 +22,10 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'), visitController.createSchedule);
+  .post(
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
+    visitController.createSchedule
+  );
 //   auth('admin', 'school', 'superadmin', 'student', 'trainer', 'block_officer'),
 // .get(studentvisitControllerController.getAllStudent);
 router.route('/get-dashboard-counts').get(visitController.getSchoolIdsAndStudentCount);
@@ -32,14 +35,18 @@ router.route('/get-trainer-details').get(visitController.getTrainerDetails);
 
 router
   .route('/get')
-  .get(auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'), visitController.getTrainerVisits);
+  .get(
+    auth('admin', 'school', 'superadmin', 'student', 'cluster', 'trainer', 'department'),
+    visitController.getTrainerVisits
+  );
 
 router.route('/get/android').get(visitController.getTrainerVisitsAndroid);
 
 router.route('/get-trainer-details/:schoolId').get(visitController.getVisitsBySchoolId);
 router.route('/update').patch(
   // auth('admin', 'school', 'superadmin', 'student', 'trainer', 'department'),
-  upload.array('files', 3),
+  upload,
+  // upload.array('files', 3),
   uploadFilesMiddleware,
   visitController.updateVisitById
 );
