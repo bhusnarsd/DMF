@@ -19,11 +19,11 @@ jobs:
 
       - name: Deploy to DigitalOcean Droplet
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{SSH_PRIVATE_KEY}}
           DO_SERVER: 139.59.21.236
           DO_USER: root
         run: |
-          echo "${DROPLET_SSH_KEY}" > ssh_key
+          echo "${SSH_PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
              cd /DMF/DMF  # Adjust path as necessary
