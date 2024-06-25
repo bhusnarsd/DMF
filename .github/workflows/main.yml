@@ -33,4 +33,4 @@ jobs:
             npm install --development
             npm run dev
             # Optionally, restart your application using PM2:
-            # pm2 restart <your_app_name>
+            # pm2 restart your_app_name
