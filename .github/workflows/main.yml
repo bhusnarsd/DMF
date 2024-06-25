@@ -17,20 +17,35 @@ jobs:
         with:
           node-version: '22'
 
-
-      - name: Install SSH Client
-        run: sudo apt-get install -y openssh-client
-
       - name: Deploy to DigitalOcean Droplet
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USERNAME }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          script: |
-            cd /DMF/DMF  # Adjust path as necessary
-            git pull origin master
-            npm install --development
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DO_SERVER: your_droplet_ip
+          DO_USER: root
+        run: |
+          echo "${SSH_PRIVATE_KEY}" > ssh_key
+          chmod 600 ssh_key
+          ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
+             cd /DMF/DMF  # Adjust path as necessary
+            git pull origin main
+            npm install
             npm run dev
-            # Optionally, restart your application using PM2:
-            # pm2 restart your_app_name
+            # pm2 restart all
+          EOF
+
+      # - name: Install SSH Client
+      #   run: sudo apt-get install -y openssh-client
+
+      # - name: Deploy to DigitalOcean Droplet
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.DROPLET_HOST }}
+      #     username: ${{ secrets.DROPLET_USERNAME }}
+      #     key: ${{ secrets.DROPLET_SSH_KEY }}
+      #     script: |
+      #       cd /DMF/DMF  # Adjust path as necessary
+      #       git pull origin master
+      #       npm install --development
+      #       npm run dev
+      #       # Optionally, restart your application using PM2:
+      #       # pm2 restart your_app_name
