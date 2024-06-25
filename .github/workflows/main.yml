@@ -19,18 +19,17 @@ jobs:
 
       - name: Deploy to DigitalOcean Droplet
         env:
-          SSH_PRIVATE_KEY: ${{SSH_PRIVATE_KEY}}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           DO_SERVER: 139.59.21.236
           DO_USER: root
         run: |
           echo "${SSH_PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
-             cd /DMF/DMF  # Adjust path as necessary
+            cd /var/www/your_project_directory
             git pull origin main
             npm install
-            npm run dev
-            # pm2 restart all
+            pm2 restart all
           EOF
 
       # - name: Install SSH Client
