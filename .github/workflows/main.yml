@@ -26,7 +26,7 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
-            cd /DMF/DMF
+            cd ~/DMF/DMF
             git pull origin main
             npm install
             npm run dev
