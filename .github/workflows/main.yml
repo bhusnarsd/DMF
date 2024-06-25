@@ -1,9 +1,10 @@
-name: Node.js CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - master
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,37 +16,28 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '22'
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
 
       - name: Deploy to DigitalOcean Droplet
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          DO_SERVER: 139.59.21.236
+          DO_SERVER: your_droplet_ip
           DO_USER: root
         run: |
-          echo "${SSH_PRIVATE_KEY}" > ssh_key
+          echo "${SSH_PRIVATE_KEY}" | tr -d '\r' > ssh_key
           chmod 600 ssh_key
-          ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
+          mkdir -p ~/.ssh
+          ssh-keyscan $DO_SERVER >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} << 'EOF'
             cd ~/DMF/DMF
+            git stash
             git pull origin main
             npm install
-            npm run dev
-            # pm2 restart all
+            pm2 reload all || pm2 start src/index.js --name "my-app"
           EOF
-
-      # - name: Install SSH Client
-      #   run: sudo apt-get install -y openssh-client
-
-      # - name: Deploy to DigitalOcean Droplet
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.DROPLET_HOST }}
-      #     username: ${{ secrets.DROPLET_USERNAME }}
-      #     key: ${{ secrets.DROPLET_SSH_KEY }}
-      #     script: |
-      #       cd /DMF/DMF  # Adjust path as necessary
-      #       git pull origin master
-      #       npm install --development
-      #       npm run dev
-      #       # Optionally, restart your application using PM2:
-      #       # pm2 restart your_app_name
