@@ -24,6 +24,7 @@ jobs:
       - name: Run tests
         run: npm test
 
+
       - name: Deploy to DigitalOcean Droplet
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
