@@ -26,10 +26,11 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh -o StrictHostKeyChecking=no -i ssh_key ${DO_USER}@${DO_SERVER} 'bash -s' << 'EOF'
-            cd /var/www/your_project_directory
+            cd /DMF/DMF
             git pull origin main
             npm install
-            pm2 restart all
+            npm run dev
+            # pm2 restart all
           EOF
 
       # - name: Install SSH Client
